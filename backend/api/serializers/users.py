@@ -5,6 +5,7 @@ from backend.settings import RECIPES_LIMIT
 from recipes.models import Recipe
 from users.models import Subscription, User
 
+
 class CustomUserCreateSerializer(UserCreateSerializer):
     """Сериализатор создания объекта класса User."""
 
