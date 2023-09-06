@@ -10,6 +10,7 @@ from .models import (
     Tag
 )
 
+
 @register(Tag)
 class TagAdmin(ModelAdmin):
     """Класс настройки раздела тегов."""
