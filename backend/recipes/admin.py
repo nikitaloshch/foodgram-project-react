@@ -1,5 +1,4 @@
 from django.contrib.admin import ModelAdmin, TabularInline, register
-
 from backend.settings import LIST_PER_PAGE
 
 from .models import (
@@ -10,7 +9,6 @@ from .models import (
     ShoppingCart,
     Tag
 )
-
 
 @register(Tag)
 class TagAdmin(ModelAdmin):

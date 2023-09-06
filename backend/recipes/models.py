@@ -5,7 +5,6 @@ from django.core.validators import (
     RegexValidator
 )
 from django.db import models
-
 from backend.settings import LENGTH_TEXT
 from users.models import User
 

@@ -1,5 +1,4 @@
 from django.contrib.admin import ModelAdmin, register
-
 from backend.settings import LIST_PER_PAGE
 
 from .models import Subscription, User
