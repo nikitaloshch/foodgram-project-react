@@ -135,15 +135,14 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Ингредиенты рецепта должны быть уникальными.'
             )
-        for ingredient in ingredients:
-            if int(ingredient.get('amount')) < 1:
-                raise serializers.ValidationError(
-                    'Должен быть хотя бы один игредиент.'
-                )
-            if int(ingredient.get('amount')) > 100:
-                raise serializers.ValidationError(
-                    'Количество ингредиентов не может быть больше 100.'
-                )
+        if len(ingredients_data) == 0:
+            raise serializers.ValidationError(
+                'Должен быть хотя бы один игредиент.'
+            )
+        if len(ingredients_data) > 100:
+            raise serializers.ValidationError(
+                'Количество ингредиентов не может быть больше 100.'
+            )
         return ingredients
 
     def validate_tags(self, tags):
