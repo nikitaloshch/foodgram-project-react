@@ -22,7 +22,6 @@ from ..serializers.recipes import (
     IngredientSerializer,
     RecipeGETSerializer,
     RecipeSerializer,
-    RecipeShortSerializer,
     ShoppingCartSerializer,
     TagSerializer
 )
@@ -88,11 +87,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeGETSerializer
         return RecipeSerializer
 
+
 class FavoriteViewSet(CreateDestroyViewSet):
     """Вьюсет удаления и добавления рецепта из|в избранного"""
 
     queryset = Favorite.objects.all()
-    serializer_class = RecipeShortSerializer
+    serializer_class = FavoriteSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

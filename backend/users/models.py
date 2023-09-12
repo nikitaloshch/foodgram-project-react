@@ -2,8 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
-from backend.settings import LENGTH_TEXT
-from backend.settings import MAX_LENGTH
+from backend.settings import LENGTH_TEXT, MAX_LENGTH
 
 
 class User(AbstractUser):

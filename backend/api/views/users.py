@@ -76,10 +76,11 @@ class CustomUserViewSet(UserViewSet):
 
 
 class GetSubscriptions(ListSubscriptionViewSet):
-        """Возвращает авторов контента, на которых подписан пользователь."""
-        pagination_class = PageNumberPagination
-        serializer_class = CustomUserSerializer
-        permission_classes = (IsAuthenticated,)
+    """Представление списка подписок текущего пользователя"""
 
-        def get_queryset(self):
-            return User.objects.filter(subscription__user=self.request.user)
+    pagination_class = PageNumberPagination
+    serializer_class = CustomUserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return User.objects.filter(subscription__user=self.request.user)
