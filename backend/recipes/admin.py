@@ -22,7 +22,7 @@ class TagAdmin(ModelAdmin):
         'color',
         'slug'
     )
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_filter = ('name',)
     list_per_page = LIST_PER_PAGE
     search_fields = ('name',)
@@ -38,7 +38,7 @@ class IngredientAdmin(ModelAdmin):
         'name',
         'measurement_unit'
     )
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_filter = ('name',)
     list_per_page = LIST_PER_PAGE
     search_fields = ('name',)
@@ -71,7 +71,7 @@ class RecipeAdmin(ModelAdmin):
         IngredientAmountInline,
     ]
 
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_editable = ('author',)
     list_filter = ('author', 'name', 'tags')
     list_per_page = LIST_PER_PAGE
@@ -83,13 +83,13 @@ class RecipeAdmin(ModelAdmin):
             (ingredient.name for ingredient in object.ingredients.all())
         )
 
-    get_ingredients.short_description = 'ингредиенты'
+    get_ingredients.short_description = 'Ингредиенты'
 
     def get_tags(self, object):
         """Получает тег или список тегов рецепта."""
         return '\n'.join((tag.name for tag in object.tags.all()))
 
-    get_tags.short_description = 'теги'
+    get_tags.short_description = 'Теги'
 
     def count_favorite(self, object):
         """Вычисляет количество добавлений рецепта в избранное."""
@@ -108,7 +108,7 @@ class IngredientAmountAdmin(ModelAdmin):
         'amount',
         'recipe'
     )
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_per_page = LIST_PER_PAGE
 
 
@@ -122,7 +122,7 @@ class FavoriteAdmin(ModelAdmin):
         'recipe',
     )
 
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_editable = ('user', 'recipe')
     list_filter = ('user',)
     search_fields = ('user',)
@@ -139,7 +139,7 @@ class ShoppingCartAdmin(ModelAdmin):
         'recipe',
     )
 
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_editable = ('user', 'recipe')
     list_filter = ('user',)
     search_fields = ('user',)

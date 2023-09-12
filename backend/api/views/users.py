@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import permissions, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from users.models import Subscription, User
 
+from ..mixins import ListSubscriptionViewSet
 from ..permissions import AnonimOrAuthenticatedReadOnly
 from ..serializers.users import (
     CustomUserSerializer,
@@ -48,7 +50,7 @@ class CustomUserViewSet(UserViewSet):
         methods=['post', 'delete'],
         url_path='subscribe',
         url_name='subscribe',
-        permission_classes=(permissions.IsAuthenticated,)
+        permission_classes=(IsAuthenticated,)
     )
     def get_subscribe(self, request, id):
         """Позволяет пользователю подписываться|отписываться от
@@ -72,21 +74,12 @@ class CustomUserViewSet(UserViewSet):
         subscription.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(
-        detail=False,
-        methods=['get'],
-        url_path='subscriptions',
-        url_name='subscriptions',
-        permission_classes=(permissions.IsAuthenticated,)
-    )
-    def get_subscriptions(self, request):
-        """Возвращает авторов контента, на которых подписан пользователь.."""
-        authors = User.objects.filter(author__subscriber=request.user)
-        paginator = PageNumberPagination()
-        result_pages = paginator.paginate_queryset(
-            queryset=authors, request=request
-        )
-        serializer = SubscriptionShowSerializer(
-            result_pages, context={'request': request}, many=True
-        )
-        return paginator.get_paginated_response(serializer.data)
+
+class GetSubscriptions(ListSubscriptionViewSet):
+        """Возвращает авторов контента, на которых подписан пользователь."""
+        pagination_class = PageNumberPagination
+        serializer_class = CustomUserSerializer
+        permission_classes = (IsAuthenticated,)
+
+        def get_queryset(self):
+            return User.objects.filter(subscription__user=self.request.user)

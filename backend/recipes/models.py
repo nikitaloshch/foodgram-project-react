@@ -7,6 +7,7 @@ from django.core.validators import (
 from django.db import models
 
 from backend.settings import LENGTH_TEXT
+from backend.settings import MAX_LENGTH
 from users.models import User
 
 
@@ -22,7 +23,7 @@ class Tag(models.Model):
 
     color = ColorField(
         default='#FF0000',
-        max_length=7,
+        max_length=30,
         verbose_name='цвет',
         unique=True
     )
@@ -49,13 +50,13 @@ class Ingredient(models.Model):
     """Класс ингредиентов."""
 
     name = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH,
         verbose_name='Hазвание',
         db_index=True
     )
     measurement_unit = models.CharField(
-        max_length=10,
-        verbose_name='единица измерения'
+        max_length=30,
+        verbose_name='Единица измерения'
     )
 
     class Meta:
@@ -74,7 +75,7 @@ class Recipe(models.Model):
         Ingredient,
         through='IngredientAmount',
         related_name='recipes',
-        verbose_name='ингредиенты'
+        verbose_name='Ингредиенты'
 
     )
     tags = models.ManyToManyField(
@@ -84,7 +85,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         upload_to='recipes/',
-        verbose_name='изображение'
+        verbose_name='Изображение'
     )
     name = models.CharField(
         max_length=200,
@@ -93,7 +94,7 @@ class Recipe(models.Model):
     )
     text = models.TextField(verbose_name='описание')
     cooking_time = models.PositiveSmallIntegerField(
-        verbose_name='время приготовления (в минутах)',
+        verbose_name='Время приготовления (в минутах)',
         validators=[
             MinValueValidator(
                 1,
@@ -109,7 +110,7 @@ class Recipe(models.Model):
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='дата публикации',
+        verbose_name='Дата публикации',
         db_index=True
     )
 
@@ -128,15 +129,15 @@ class IngredientAmount(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        verbose_name='ингредиент'
+        verbose_name='Ингредиент'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        verbose_name='рецепт'
+        verbose_name='Рецепт'
     )
     amount = models.PositiveSmallIntegerField(
-        verbose_name='количество',
+        verbose_name='Количество',
         validators=[
             MinValueValidator(
                 1,
@@ -171,7 +172,7 @@ class Favorite(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         related_name='favoriting',
-        verbose_name='рецепт'
+        verbose_name='Рецепт'
     )
     user = models.ForeignKey(
         User,
@@ -202,7 +203,7 @@ class ShoppingCart(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         related_name='shopping_cart',
-        verbose_name='рецепт'
+        verbose_name='Рецепт'
     )
     user = models.ForeignKey(
         User,

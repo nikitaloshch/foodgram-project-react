@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='any_string')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -158,6 +158,7 @@ DJOSER = {
     },
 }
 
+MAX_LENGTH = 200
 LENGTH_TEXT = 15
 LIST_PER_PAGE = 10
 RECIPES_LIMIT = 2

@@ -18,7 +18,7 @@ class UserAdmin(ModelAdmin):
         'password',
         'is_admin'
     )
-    empty_value_display = 'значение отсутствует'
+    empty_value_display = 'Значение отсутствует'
     list_editable = ('is_admin',)
     list_filter = ('username', 'email')
     list_per_page = LIST_PER_PAGE

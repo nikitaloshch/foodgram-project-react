@@ -3,19 +3,20 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 from backend.settings import LENGTH_TEXT
+from backend.settings import MAX_LENGTH
 
 
 class User(AbstractUser):
     """Класс пользователей."""
 
     email = models.EmailField(
-        max_length=254,
+        max_length=MAX_LENGTH,
         verbose_name='email',
         unique=True,
         db_index=True
     )
     username = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH,
         verbose_name='Имя пользователя',
         unique=True,
         db_index=True,
@@ -25,19 +26,19 @@ class User(AbstractUser):
         )]
     )
     first_name = models.CharField(
-        max_length=150,
-        verbose_name='имя'
+        max_length=MAX_LENGTH,
+        verbose_name='Имя'
     )
     last_name = models.CharField(
-        max_length=150,
-        verbose_name='фамилия'
+        max_length=MAX_LENGTH,
+        verbose_name='Фамилия'
     )
     password = models.CharField(
-        max_length=150,
-        verbose_name='пароль'
+        max_length=MAX_LENGTH,
+        verbose_name='Пароль'
     )
     is_admin = models.BooleanField(
-        verbose_name='администратор',
+        verbose_name='Администратор',
         default=False
     )
 
@@ -65,7 +66,7 @@ class Subscription(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='subscriber',
-        verbose_name='подписчик'
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
