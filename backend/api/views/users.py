@@ -1,14 +1,12 @@
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import permissions, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from users.models import Subscription, User
 
-from ..mixins import ListSubscriptionViewSet
 from ..permissions import AnonimOrAuthenticatedReadOnly
 from ..serializers.users import (
     CustomUserSerializer,
@@ -32,6 +30,8 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=(permissions.IsAuthenticated,)
     )
     def get_me(self, request):
+        """Позволяет пользователю получить подробную информацию о себе
+        и редактировать её."""
         if request.method == 'PATCH':
             serializer = CustomUserSerializer(
                 request.user, data=request.data,
@@ -50,7 +50,7 @@ class CustomUserViewSet(UserViewSet):
         methods=['post', 'delete'],
         url_path='subscribe',
         url_name='subscribe',
-        permission_classes=(IsAuthenticated,)
+        permission_classes=(permissions.IsAuthenticated,)
     )
     def get_subscribe(self, request, id):
         """Позволяет пользователю подписываться|отписываться от
@@ -74,13 +74,21 @@ class CustomUserViewSet(UserViewSet):
         subscription.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-class GetSubscriptions(ListSubscriptionViewSet):
-    """Представление списка подписок текущего пользователя"""
-
-    pagination_class = PageNumberPagination
-    serializer_class = CustomUserSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        return User.objects.filter(subscription__user=self.request.user)
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='subscriptions',
+        url_name='subscriptions',
+        permission_classes=(permissions.IsAuthenticated,)
+    )
+    def get_subscriptions(self, request):
+        """Возвращает авторов контента, на которых подписан пользователь.."""
+        authors = User.objects.filter(author__subscriber=request.user)
+        paginator = PageNumberPagination()
+        result_pages = paginator.paginate_queryset(
+            queryset=authors, request=request
+        )
+        serializer = SubscriptionShowSerializer(
+            result_pages, context={'request': request}, many=True
+        )
+        return paginator.get_paginated_response(serializer.data)
