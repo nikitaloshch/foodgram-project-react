@@ -48,6 +48,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = IngredientSearchFilter
     search_fields = ('^name', )
 
+
 # А прям обязательно делить, так не пойдет?
 # Понимаю чистый код все дела, но может можно и так оставить?
 # Главное же функционал, а потом если что доработаю

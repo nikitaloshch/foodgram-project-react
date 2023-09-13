@@ -6,7 +6,12 @@ from django.core.validators import (
 )
 from django.db import models
 
-from backend.settings import LENGTH_TEXT, MAX_LENGTH, MAX_LENGTH_50, MAX_LENGTH_30
+from backend.settings import (
+    LENGTH_TEXT,
+    MAX_LENGTH,
+    MAX_LENGTH_50,
+    MAX_LENGTH_30
+)
 from users.models import User
 
 
