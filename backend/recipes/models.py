@@ -6,8 +6,7 @@ from django.core.validators import (
 )
 from django.db import models
 
-from backend.settings import (LENGTH_TEXT, MAX_LENGTH,
-                              MAX_LENGTH_50, MAX_LENGTH_30)
+from django.conf import settings
 from users.models import User
 
 
@@ -15,7 +14,7 @@ class Tag(models.Model):
     """Класс тегов."""
 
     name = models.CharField(
-        max_length=MAX_LENGTH_50,
+        max_length=settings.MAX_LENGTH_50,
         verbose_name='Hазвание',
         unique=True,
         db_index=True
@@ -23,12 +22,12 @@ class Tag(models.Model):
 
     color = ColorField(
         default='#FF0000',
-        max_length=MAX_LENGTH_30,
+        max_length=settings.MAX_LENGTH_30,
         verbose_name='цвет',
         unique=True
     )
     slug = models.SlugField(
-        max_length=MAX_LENGTH_50,
+        max_length=settings.MAX_LENGTH_50,
         verbose_name='slug',
         unique=True,
         validators=[RegexValidator(
@@ -43,19 +42,19 @@ class Tag(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return self.slug[:LENGTH_TEXT]
+        return self.slug[:settings.LENGTH_TEXT]
 
 
 class Ingredient(models.Model):
     """Класс ингредиентов."""
 
     name = models.CharField(
-        max_length=MAX_LENGTH,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Hазвание',
         db_index=True
     )
     measurement_unit = models.CharField(
-        max_length=MAX_LENGTH_30,
+        max_length=settings.MAX_LENGTH_30,
         verbose_name='Единица измерения'
     )
 
@@ -65,7 +64,7 @@ class Ingredient(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return self.name[:LENGTH_TEXT]
+        return self.name[:settings.LENGTH_TEXT]
 
 
 class Recipe(models.Model):
@@ -88,7 +87,7 @@ class Recipe(models.Model):
         verbose_name='Изображение'
     )
     name = models.CharField(
-        max_length=MAX_LENGTH,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Hазвание',
         db_index=True
     )
@@ -120,7 +119,7 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
 
     def __str__(self):
-        return self.name[:LENGTH_TEXT]
+        return self.name[:settings.LENGTH_TEXT]
 
 
 class IngredientAmount(models.Model):
