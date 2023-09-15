@@ -1,7 +1,10 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views.users import CustomUserViewSet, SubscriptionViewSet
+from .views.users import (
+    CustomUserViewSet,
+    SubscriptionViewSet,
+)
 from .views.recipes import (
     TagViewSet,
     ShoppingCartViewSet,
