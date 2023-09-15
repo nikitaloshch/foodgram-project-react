@@ -1,19 +1,20 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from . import views
-
+from .views.users import CustomUserViewSet, SubscriptionViewSet
+from .views.recipes import TagViewSet, ShoppingCartViewSet,\
+                            RecipeViewSet, IngredientViewSet
 app_name = 'api'
 
 router = routers.DefaultRouter()
-router.register('users', views.users.CustomUserViewSet, basename='users')
-router.register('subscriptions', views.users.SubscriptionViewSet,
+router.register('users', CustomUserViewSet, basename='users')
+router.register('subscriptions', SubscriptionViewSet,
                 basename='subscriptions')
-router.register('tags', views.recipes.TagViewSet, basename='tags')
-router.register('ingredients', views.recipes.IngredientViewSet,
+router.register('tags', TagViewSet, basename='tags')
+router.register('ingredients', IngredientViewSet,
                 basename='ingredients')
-router.register('recipes', views.recipes.RecipeViewSet, basename='recipes')
-router.register('shopping_cart', views.recipes.ShoppingCartViewSet,
+router.register('recipes', RecipeViewSet, basename='recipes')
+router.register('shopping_cart', ShoppingCartViewSet,
                 basename='shopping_cart')
 
 
