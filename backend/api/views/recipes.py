@@ -49,6 +49,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ('^name', )
 
 
+# А прям обязательно делить, так не пойдет?
+# Понимаю чистый код все дела, но может можно и так оставить?
+# Главное же функционал, а потом если что доработаю
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет создания обьектов класса Recipe."""
 
@@ -112,21 +115,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         shopping_cart_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def get_serializer_class(self):
-        """Определяет какой сериализатор будет использоваться
-        для разных типов запроса."""
-        if self.request.method == 'GET':
-            return RecipeGETSerializer
-        return RecipeSerializer
-
-
-class ShoppingCartViewSet(viewsets.ViewSet):
-    """Вьюсет для скачки списка покупок"""
-
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ShoppingCartSerializer
-    pagination_class = None
-
     @action(
         detail=False,
         methods=['get'],
@@ -147,3 +135,10 @@ class ShoppingCartViewSet(viewsets.ViewSet):
             ).annotate(ingredient_value=Sum('amount'))
         )
         return create_shopping_cart(ingredients_cart)
+
+    def get_serializer_class(self):
+        """Определяет какой сериализатор будет использоваться
+        для разных типов запроса."""
+        if self.request.method == 'GET':
+            return RecipeGETSerializer
+        return RecipeSerializer
