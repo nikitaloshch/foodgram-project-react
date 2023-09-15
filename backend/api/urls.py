@@ -6,13 +6,13 @@ from . import views
 app_name = 'api'
 
 router = routers.DefaultRouter()
-router.register('users', views.CustomUserViewSet, basename='users')
-router.register('subscriptions', views.SubscriptionViewSet,
+router.register('users', views.users.CustomUserViewSet, basename='users')
+router.register('subscriptions', views.users.SubscriptionViewSet,
                 basename='subscriptions')
-router.register('tags', views.TagViewSet, basename='tags')
-router.register('ingredients', views.IngredientViewSet, basename='ingredients')
-router.register('recipes', views.RecipeViewSet, basename='recipes')
-router.register('shopping_cart', views.ShoppingCartViewSet,
+router.register('tags', views.recipes.TagViewSet, basename='tags')
+router.register('ingredients', views.recipes.IngredientViewSet, basename='ingredients')
+router.register('recipes', views.recipes.RecipeViewSet, basename='recipes')
+router.register('shopping_cart', views.recipes.ShoppingCartViewSet,
                 basename='shopping_cart')
 
 
