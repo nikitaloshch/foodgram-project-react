@@ -49,8 +49,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ('^name', )
 
 
-# Попытался разделить вьювсы, помучался, не очень получилось
-# Посмотрел в пачке, много у кого такая реализация, даже те кто сдал диплом
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет создания обьектов класса Recipe."""
 
@@ -89,32 +87,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        detail=True,
-        methods=['post', 'delete'],
-        url_path='shopping_cart',
-        url_name='shopping_cart',
-        permission_classes=(permissions.IsAuthenticated,)
-    )
-    def get_shopping_cart(self, request, pk):
-        """Позволяет пользователю добавлять рецепты в список покупок."""
-        recipe = get_object_or_404(Recipe, pk=pk)
-        if request.method == 'POST':
-            serializer = ShoppingCartSerializer(
-                data={'user': request.user.id, 'recipe': recipe.id}
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            shopping_cart_serializer = RecipeShortSerializer(recipe)
-            return Response(
-                shopping_cart_serializer.data, status=status.HTTP_201_CREATED
-            )
-        shopping_cart_recipe = get_object_or_404(
-            ShoppingCart, user=request.user, recipe=recipe
-        )
-        shopping_cart_recipe.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @action(
         detail=False,
         methods=['get'],
         url_path='download_shopping_cart',
@@ -141,3 +113,32 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return RecipeGETSerializer
         return RecipeSerializer
+
+
+class ShoppingCartViewSet(viewsets.ViewSet):
+    """Вьюсет для скачки списка покупок"""
+
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ShoppingCartSerializer
+    pagination_class = None
+
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='download_shopping_cart',
+        url_name='download_shopping_cart',
+        permission_classes=(permissions.IsAuthenticated,)
+    )
+    def download_shopping_cart(self, request):
+        """Позволяет пользователю загрузить список покупок."""
+        ingredients_cart = (
+            IngredientAmount.objects.filter(
+                recipe__shopping_cart__user=request.user
+            ).values(
+                'ingredient__name',
+                'ingredient__measurement_unit',
+            ).order_by(
+                'ingredient__name'
+            ).annotate(ingredient_value=Sum('amount'))
+        )
+        return create_shopping_cart(ingredients_cart)
