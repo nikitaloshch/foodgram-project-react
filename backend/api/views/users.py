@@ -76,11 +76,11 @@ class SubscriptionViewSet(viewsets.ViewSet):
         url_path='subscribe',
         url_name='subscribe',
     )
-    def get_subscribe(self, request, id):
+    def get_subscribe(self, request, pk):
         """Позволяет пользователю подписываться|отписываться от
         от автора контента"""
 
-        author = get_object_or_404(User, id=id)
+        author = get_object_or_404(User, id=pk)
         if request.method == 'POST':
             serializer = SubscriptionSerializer(
                 data={'subscriber': request.user.id, 'author': author.id}
