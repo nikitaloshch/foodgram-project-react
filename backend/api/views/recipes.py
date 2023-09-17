@@ -10,7 +10,6 @@ from recipes.models import (
     Ingredient,
     IngredientAmount,
     Recipe,
-    ShoppingCart,
     Tag
 )
 
