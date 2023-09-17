@@ -19,8 +19,8 @@ urlpatterns = [
     path('users/subscriptions/', CustomUserViewSet.as_view(
         {'get': 'get_subscriptions'}), name='get-subscriptions'),
     path('users/<int:pk>/subscribe/',
-         SubscriptionViewSet.as_view({'post': 'subscribe',
-                                      'delete': 'unsubscribe'}),
+         SubscriptionViewSet.as_view({'post': 'get_subscribe',
+                                      'delete': 'get_subscribe'}),
          name='subscribe-unsubscribe'),
     path('recipes/<int:pk>/favorite/',
          RecipeViewSet.as_view({'post': 'get_favorite',
