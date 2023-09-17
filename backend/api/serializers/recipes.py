@@ -177,12 +177,22 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
+        recipe = instance
+        instance.image = validated_data.get('image', instance.image)
+        instance.name = validated_data.get('name', instance.name)
+        instance.text = validated_data.get('text', instance.name)
+        instance.cooking_time = validated_data.get(
+            'cooking_time', instance.cooking_time
+        )
         instance.tags.clear()
-        IngredientAmount.objects.filter(recipe=instance).delete()
-        instance.tags.set(validated_data.pop('tags'))
+        instance.ingredients.clear()
+        tags_data = validated_data.get('tags')
+        instance.tags.set(tags_data)
         ingredients_data = validated_data.get('ingredients')
-        self.add_ingredients(ingredients_data, instance)
-        return super().update(instance, validated_data)
+        IngredientAmount.objects.filter(recipe=recipe).delete()
+        self.add_ingredients(ingredients_data, recipe)
+        instance.save()
+        return instance
 
     def to_representation(self, recipe):
         """Определяет какой сериализатор будет использоваться для чтения."""
