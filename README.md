@@ -8,7 +8,7 @@
 [![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
 [![GitHub%20Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
 
-Foodgram создан для публикации и просмотра рецептов. 
+Foodgram - создан для публикации и просмотра рецептов. 
 В нем пользователи могут создавать рецепты, добавлять их в избранное, а так же в список покупок и скачивать его.
 Можно подписываться на любимых авторов.
 
