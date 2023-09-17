@@ -9,6 +9,7 @@ from recipes.models import (
     Favorite,
     Ingredient,
     IngredientAmount,
+    ShoppingCart,
     Recipe,
     Tag
 )
@@ -86,25 +87,30 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        detail=False,
-        methods=['get'],
-        url_path='download_shopping_cart',
-        url_name='download_shopping_cart',
+        detail=True,
+        methods=['post', 'delete'],
+        url_path='shopping_cart',
+        url_name='shopping_cart',
         permission_classes=(permissions.IsAuthenticated,)
     )
-    def download_shopping_cart(self, request):
-        """Позволяет пользователю загрузить список покупок."""
-        ingredients_cart = (
-            IngredientAmount.objects.filter(
-                recipe__shopping_cart__user=request.user
-            ).values(
-                'ingredient__name',
-                'ingredient__measurement_unit',
-            ).order_by(
-                'ingredient__name'
-            ).annotate(ingredient_value=Sum('amount'))
+    def get_shopping_cart(self, request, pk):
+        """Позволяет пользователю добавлять рецепты в список покупок."""
+        recipe = get_object_or_404(Recipe, pk=pk)
+        if request.method == 'POST':
+            serializer = ShoppingCartSerializer(
+                data={'user': request.user.id, 'recipe': recipe.id}
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            shopping_cart_serializer = RecipeShortSerializer(recipe)
+            return Response(
+                shopping_cart_serializer.data, status=status.HTTP_201_CREATED
+            )
+        shopping_cart_recipe = get_object_or_404(
+            ShoppingCart, user=request.user, recipe=recipe
         )
-        return create_shopping_cart(ingredients_cart)
+        shopping_cart_recipe.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_serializer_class(self):
         """Определяет какой сериализатор будет использоваться
