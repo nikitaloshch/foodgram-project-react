@@ -114,7 +114,8 @@ class ShoppingCartViewSet(viewsets.ViewSet):
         permission_classes=(permissions.IsAuthenticated,)
     )
     def action_recipe_in_cart(self, request, pk):
-        """Позволяет пользователю добавлять/удалять рецепты в|из список покупок."""
+        """Позволяет пользователю добавлять/удалять рецепты
+        в|из список покупок."""
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
             serializer = ShoppingCartSerializer(
