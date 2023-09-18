@@ -60,6 +60,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
+    def get_serializer_class(self):
+        """Определяет какой сериализатор будет использоваться
+        для разных типов запроса."""
+        if self.request.method == 'GET':
+            return RecipeGETSerializer
+        return RecipeSerializer
+
+
+class FavoriteViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = FavoriteSerializer
+
     @action(
         detail=True,
         methods=['post', 'delete'],
@@ -67,8 +79,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_name='favorite',
         permission_classes=(permissions.IsAuthenticated,)
     )
-    def get_favorite(self, request, pk):
-        """Позволяет пользователю добавлять рецепты в избранное."""
+    def add_and_delete_favorite(self, request, pk):
+        """Позволяет пользователю добавлять|удалять рецепты в|из избранное."""
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
             serializer = FavoriteSerializer(
@@ -86,6 +98,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         favorite_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class ShoppingCartViewSet(viewsets.ViewSet):
+    """Вьюсет для взаимодействий со списком покупок"""
+
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ShoppingCartSerializer
+    pagination_class = None
+
     @action(
         detail=True,
         methods=['post', 'delete'],
@@ -93,8 +113,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_name='shopping_cart',
         permission_classes=(permissions.IsAuthenticated,)
     )
-    def get_shopping_cart(self, request, pk):
-        """Позволяет пользователю добавлять рецепты в список покупок."""
+    def action_recipe_in_cart(self, request, pk):
+        """Позволяет пользователю добавлять/удалять рецепты в|из список покупок."""
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
             serializer = ShoppingCartSerializer(
@@ -111,21 +131,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         shopping_cart_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_serializer_class(self):
-        """Определяет какой сериализатор будет использоваться
-        для разных типов запроса."""
-        if self.request.method == 'GET':
-            return RecipeGETSerializer
-        return RecipeSerializer
-
-
-class ShoppingCartViewSet(viewsets.ViewSet):
-    """Вьюсет для скачки списка покупок"""
-
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ShoppingCartSerializer
-    pagination_class = None
 
     @action(
         detail=False,

@@ -76,7 +76,7 @@ class SubscriptionViewSet(viewsets.ViewSet):
         url_path='subscribe',
         url_name='subscribe',
     )
-    def get_subscribe(self, request, pk):
+    def subscribe_unsubscribe(self, request, pk):
         """Позволяет пользователю подписываться|отписываться от
         от автора контента"""
 
