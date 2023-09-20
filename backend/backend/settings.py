@@ -140,7 +140,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPaginator',
     'PAGE_SIZE': 6,
 }
 
@@ -163,4 +163,4 @@ MAX_LENGTH_50 = 50
 MAX_LENGTH_30 = 30
 LENGTH_TEXT = 15
 LIST_PER_PAGE = 10
-RECIPES_LIMIT = 2
+RECIPES_LIMIT = 10
